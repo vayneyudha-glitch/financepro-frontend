@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Report Generator | FinancePro Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                <h1>Report Generator</h1>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9790;</button>
+            </header>
+            <main class="page-content">
+                <div class="card">
+                    <div class="card-header"><h3>Generate Report</h3></div>
+                    <div class="card-body">
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                            <select class="form-input" id="reportType" style="min-width:140px;">
+                                <option value="daily">Daily Report</option>
+                                <option value="weekly">Weekly Report</option>
+                                <option value="monthly" selected>Monthly Report</option>
+                                <option value="yearly">Yearly Report</option>
+                            </select>
+                            <select class="form-input" id="reportUser" style="min-width:180px;"><option value="">All Users</option></select>
+                            <select class="form-input" id="reportCategory" style="min-width:160px;"><option value="">All Categories</option></select>
+                            <select class="form-input" id="reportTrxType" style="max-width:120px;"><option value="">All Types</option><option value="Income">Income</option><option value="Expense">Expense</option></select>
+                            <input type="date" class="form-input" id="reportDateFrom" style="max-width:150px;" title="Custom from">
+                            <input type="date" class="form-input" id="reportDateTo" style="max-width:150px;" title="Custom to">
+                            <button class="btn btn-primary" id="generateBtn">Generate</button>
+                            <button class="btn btn-secondary" id="downloadCsvBtn">Download CSV</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="reportContent"></div>
+            </main>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/admin-reports.js"></script>
+</body>
+</html>

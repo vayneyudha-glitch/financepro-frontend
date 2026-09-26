@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Register — FinancePro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <div class="auth-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html" class="auth-logo">
+                    <span class="logo-icon">&#x1F4B0;</span>
+                    <span>FinancePro</span>
+                </a>
+                <h1>Create Your Account</h1>
+                <p>Start managing your finances today</p>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="John Doe" autocomplete="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Phone Number</label>
+                    <input type="text" id="regPhone" placeholder="081234567890" autocomplete="tel" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPassword" placeholder="Min. 8 characters" autocomplete="new-password" required>
+                        <button type="button" class="password-toggle" id="regPasswordToggle">&#x1F441;</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="regConfirmPassword" placeholder="Repeat password" autocomplete="new-password" required>
+                        <button type="button" class="password-toggle" id="regConfirmToggle">&#x1F441;</button>
+                    </div>
+                </div>
+
+                <!-- OTP Section -->
+                <div class="form-group" id="otpSection" style="display:none;">
+                    <label for="regOtp">Kode Verifikasi (Email OTP)</label>
+                    <input type="text" id="regOtp" placeholder="Masukkan kode 6 digit dari email" maxlength="6" autocomplete="one-time-code" inputmode="numeric">
+                </div>
+
+                <div class="auth-error" id="registerError" style="display:none;"></div>
+                <div class="auth-success" id="registerSuccess" style="display:none;"></div>
+
+                <!-- Action buttons (change dynamically) -->
+                <button type="button" class="btn btn-secondary btn-block btn-lg" id="btnSendOtp">Kirim Kode Verifikasi</button>
+                <button type="button" class="btn btn-primary btn-block btn-lg" id="btnVerifyOtp" style="display:none;">Verifikasi</button>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnRegister" style="display:none;">Verifikasi & Daftar</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html" class="auth-link">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (typeof redirectIfLoggedIn === 'function') {
+            redirectIfLoggedIn();
+        } else if (isLoggedIn()) {
+            window.location.replace(isAdmin() ? 'admin.html' : 'dashboard.html');
+        }
+
+        // --- State ---
+        var phoneVerified = false;
+        var otpCooldownTimer = null;
+        var otpCountdown = 0;
+
+        // --- DOM helpers ---
+        function showError(msg) {
+            var el = document.getElementById('registerError');
+            el.textContent = msg;
+            el.style.display = 'block';
+            var successEl = document.getElementById('registerSuccess');
+            successEl.style.display = 'none';
+        }
+        function showSuccess(msg) {
+            var el = document.getElementById('registerSuccess');
+            el.textContent = msg;
+            el.style.display = 'block';
+            var errorEl = document.getElementById('registerError');
+            errorEl.style.display = 'none';
+        }
+        function clearMessages() {
+            var el = document.getElementById('registerError');
+            el.textContent = '';
+            el.style.display = 'none';
+            var successEl = document.getElementById('registerSuccess');
+            successEl.textContent = '';
+            successEl.style.display = 'none';
+        }
+
+        function initToggle(toggleId, inputId) {
+            var toggle = document.getElementById(toggleId);
+            var input = document.getElementById(inputId);
+            toggle.addEventListener('click', function() {
+                input.type = input.type === 'password' ? 'text' : 'password';
+                this.textContent = input.type === 'password' ? '\uD83D\uDC41' : '\uD83D\uDE48';
+            });
+        }
+        initToggle('regPasswordToggle', 'regPassword');
+        initToggle('regConfirmToggle', 'regConfirmPassword');
+
+        // --- OTP send cooldown display ---
+        function startCooldown(seconds) {
+            otpCountdown = seconds;
+            var btn = document.getElementById('btnSendOtp');
+            btn.disabled = true;
+            btn.textContent = 'Kirim Ulang Kode (' + otpCountdown + 's)';
+
+            if (otpCooldownTimer) clearInterval(otpCooldownTimer);
+            otpCooldownTimer = setInterval(function() {
+                otpCountdown--;
+                if (otpCountdown <= 0) {
+                    clearInterval(otpCooldownTimer);
+                    otpCooldownTimer = null;
+                    btn.disabled = false;
+                    btn.textContent = 'Kirim Ulang Kode';
+                } else {
+                    btn.textContent = 'Kirim Ulang Kode (' + otpCountdown + 's)';
+                }
+            }, 1000);
+        }
+
+        // --- Validate phone (basic client-side, backend does full validation) ---
+        function validatePhoneClient(phone) {
+            if (!phone || phone.length < 9) return false;
+            var digits = phone.replace(/\D/g, '');
+            if (digits.length < 9 || digits.length > 15) return false;
+            return true;
+        }
+
+        // --- Send OTP ---
+        document.getElementById('btnSendOtp').addEventListener('click', async function() {
+            clearMessages();
+
+            var name = document.getElementById('regName').value.trim();
+            var email = document.getElementById('regEmail').value.trim();
+            var phone = document.getElementById('regPhone').value.trim();
+            var password = document.getElementById('regPassword').value;
+            var confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            // Validate all fields first
+            if (!name || !email || !phone || !password || !confirmPassword) {
+                showError('Semua field wajib diisi.');
+                return;
+            }
+            if (password.length < 8) {
+                showError('Password harus minimal 8 karakter.');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showError('Password tidak cocok.');
+                return;
+            }
+            if (!validatePhoneClient(phone)) {
+                showError('Nomor HP tidak valid. Contoh: 081234567890');
+                return;
+            }
+
+            var btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Mengirim...';
+
+            var result = await OTPAPI.send(phone, name, email);
+
+            btn.disabled = false;
+
+            if (!result.ok) {
+                if (result.status === 429 && result.data && result.data.data && result.data.data.cooldownRemaining) {
+                    var wait = result.data.data.cooldownRemaining;
+                    showError(result.data.message || 'Silakan tunggu sebelum meminta kode baru.');
+                    startCooldown(wait);
+                } else {
+                    showError(result.data.message || 'Gagal mengirim kode verifikasi.');
+                }
+                return;
+            }
+
+            // Show OTP input section
+            document.getElementById('otpSection').style.display = 'block';
+            document.getElementById('btnVerifyOtp').style.display = 'block';
+            btn.style.display = 'none';
+
+            var cooldown = (result.data.data && result.data.data.cooldown) || 60;
+            startCooldown(cooldown);
+
+            var maskedEmail = (result.data.data && result.data.data.email) || email;
+            showSuccess('Kode verifikasi telah dikirim ke: ' + maskedEmail + '. Periksa inbox email Anda, termasuk folder spam/junk jika email tidak ditemukan.');
+        });
+
+        // --- Verify OTP ---
+        document.getElementById('btnVerifyOtp').addEventListener('click', async function() {
+            clearMessages();
+
+            var email = document.getElementById('regEmail').value.trim();
+            var phone = document.getElementById('regPhone').value.trim();
+            var code = document.getElementById('regOtp').value.trim();
+
+            if (!code || code.length !== 6) {
+                showError('Kode verifikasi harus 6 digit.');
+                return;
+            }
+
+            var btn = this;
+            btn.disabled = true;
+            btn.textContent = 'Memverifikasi...';
+
+            var result = await OTPAPI.verify(phone, code, email);
+
+            btn.disabled = false;
+            btn.textContent = 'Verifikasi';
+
+            if (!result.ok) {
+                showError(result.data.message || 'Verifikasi gagal.');
+                return;
+            }
+
+            // Email verified!
+            phoneVerified = true;
+            showSuccess('Email berhasil diverifikasi. Silakan klik "Verifikasi & Daftar" untuk menyelesaikan pendaftaran.');
+
+            // Hide OTP section, show register button
+            document.getElementById('otpSection').style.display = 'none';
+            btn.style.display = 'none';
+            document.getElementById('btnSendOtp').style.display = 'none';
+            document.getElementById('btnRegister').style.display = 'block';
+        });
+
+        // --- Final registration ---
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearMessages();
+
+            if (!phoneVerified) {
+                showError('Email belum diverifikasi. Silakan kirim dan verifikasi kode OTP terlebih dahulu.');
+                return;
+            }
+
+            var name = document.getElementById('regName').value.trim();
+            var email = document.getElementById('regEmail').value.trim();
+            var phone = document.getElementById('regPhone').value.trim();
+            var password = document.getElementById('regPassword').value;
+            var confirmPassword = document.getElementById('regConfirmPassword').value;
+
+            var btn = document.getElementById('btnRegister');
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+
+            var result = await AuthAPI.register(name, email, phone, password, confirmPassword, true);
+
+            btn.disabled = false;
+            btn.textContent = 'Verifikasi & Daftar';
+
+            if (!result.ok) {
+                showError(result.data.message || 'Registration failed.');
+                return;
+            }
+
+            showToast('Registration successful! Redirecting...', 'success');
+            setTimeout(function() { window.location.replace('dashboard.html'); }, 1000);
+        });
+    </script>
+</body>
+</html>

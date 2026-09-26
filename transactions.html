@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Transactions — FinancePro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">&#9776;</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#127769;</button>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1>Transactions</h1>
+                <p>Manage your income and expenses</p>
+            </div>
+            <button class="btn btn-primary" id="btnAddTransaction">+ Add Transaction</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <input type="text" id="searchInput" class="filter-input" placeholder="Search description...">
+            <select id="filterType" class="filter-input">
+                <option value="">All Types</option>
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+            </select>
+            <select id="filterCategory" class="filter-input">
+                <option value="">All Categories</option>
+            </select>
+            <div class="date-filter-group">
+                <label for="filterDateFrom">From</label>
+                <input type="date" id="filterDateFrom" class="filter-input">
+                <label for="filterDateTo">To</label>
+                <input type="date" id="filterDateTo" class="filter-input">
+            </div>
+            <select id="sortBy" class="filter-input">
+                <option value="transaction_date">Date</option>
+                <option value="amount">Amount</option>
+                <option value="created_at">Created</option>
+            </select>
+            <select id="sortOrder" class="filter-input">
+                <option value="DESC">Newest First</option>
+                <option value="ASC">Oldest First</option>
+            </select>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="card">
+            <div class="table-wrapper" id="transactionsTable">
+                <div class="loading-state"><div class="spinner"></div><p>Loading transactions...</p></div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </main>
+
+    <!-- Transaction Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Transaction</h3>
+                <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="trxType">Type</label>
+                    <select id="trxType" required>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="trxCategory">Category</label>
+                    <select id="trxCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="trxAmount">Amount (Rp)</label>
+                    <input type="number" id="trxAmount" required min="1" step="1" placeholder="100000">
+                </div>
+                <div class="form-group">
+                    <label for="trxDescription">Description</label>
+                    <input type="text" id="trxDescription" required maxlength="200" placeholder="Monthly salary">
+                </div>
+                <div class="form-group">
+                    <label for="trxDate">Date</label>
+                    <input type="date" id="trxDate" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="modalCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/transactions.js"></script>
+</body>
+</html>

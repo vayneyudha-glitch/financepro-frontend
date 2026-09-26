@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Login — FinancePro</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+           FINANCEPRO LOGIN — CHROME SAFE VERSION
+           ========================================================= */
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* =========================================================
+           LOGIN BACKGROUND
+           ========================================================= */
+
+        .auth-page {
+            position: relative !important;
+            z-index: 1 !important;
+            isolation: isolate;
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 32px;
+            overflow: hidden;
+        }
+
+        /* Grid */
+        .auth-bg-grid {
+            position: fixed !important;
+            inset: 0;
+            z-index: 0 !important;
+            pointer-events: none !important;
+
+            background-image:
+                radial-gradient(
+                    rgba(148, 163, 184, 0.18) 1px,
+                    transparent 1px
+                );
+
+            background-size: 24px 24px;
+            opacity: 0.45;
+        }
+
+        /* SVG background layer */
+        .auth-bg-layer {
+            position: fixed !important;
+            inset: 0;
+            z-index: 1 !important;
+            pointer-events: none !important;
+            overflow: hidden;
+        }
+
+        .auth-bg-layer svg {
+            position: absolute;
+            display: block;
+        }
+
+        .auth-bg-bar {
+            top: 7%;
+            left: 3%;
+            width: 290px;
+            height: 330px;
+            opacity: 0.92;
+            animation: floatY 6s ease-in-out infinite;
+        }
+
+        .auth-bg-line {
+            top: 5%;
+            right: 4%;
+            width: 330px;
+            height: 210px;
+            opacity: 0.92;
+            animation: floatY 7s ease-in-out infinite reverse;
+        }
+
+        .auth-bg-donut {
+            bottom: 7%;
+            right: 5%;
+            width: 250px;
+            height: 250px;
+            opacity: 0.92;
+            animation: floatY 8s ease-in-out infinite;
+        }
+
+        .auth-bg-stat {
+            bottom: 6%;
+            left: 5%;
+            width: 270px;
+            height: 135px;
+            opacity: 0.92;
+            animation: floatY 7.5s ease-in-out infinite;
+        }
+
+        .auth-bg-candle {
+            top: 40%;
+            left: 38%;
+            width: 220px;
+            height: 160px;
+            opacity: 0.55;
+            animation: floatY 9s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+
+        /* =========================================================
+           LOGIN CARD
+           ========================================================= */
+
+        .auth-card {
+            position: relative !important;
+            z-index: 10 !important;
+
+            width: min(460px, calc(100vw - 48px));
+            max-width: 460px;
+            margin: 0 auto;
+
+            box-sizing: border-box;
+            flex-shrink: 0;
+
+            background: rgba(255, 255, 255, 0.97);
+
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.35),
+                0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-header,
+        .auth-card .quick-login,
+        .auth-card .auth-form,
+        .auth-card .auth-footer {
+            position: relative;
+            z-index: 11;
+        }
+
+        .auth-card button,
+        .auth-card input,
+        .auth-card a {
+            position: relative;
+            z-index: 12;
+        }
+
+        /* =========================================================
+           QUICK LOGIN
+           ========================================================= */
+
+        .quick-login {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quick-login-row {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quick-login-btn {
+            min-height: 44px;
+            box-sizing: border-box;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 900px) {
+            .auth-bg-bar {
+                width: 190px;
+                height: 210px;
+                opacity: 0.55;
+            }
+
+            .auth-bg-line {
+                width: 210px;
+                height: 135px;
+                opacity: 0.55;
+            }
+
+            .auth-bg-donut {
+                width: 170px;
+                height: 170px;
+                opacity: 0.55;
+            }
+
+            .auth-bg-stat {
+                width: 190px;
+                height: 95px;
+                opacity: 0.55;
+            }
+
+            .auth-bg-candle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .auth-page {
+                min-height: 100dvh;
+                padding: 20px 12px;
+            }
+
+            .auth-card {
+                width: 100%;
+                max-width: 460px;
+                padding: 28px 22px;
+            }
+
+            .quick-login-row {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-bg-bar,
+            .auth-bg-line,
+            .auth-bg-donut,
+            .auth-bg-stat,
+            .auth-bg-candle,
+            .auth-bg-grid {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-page">
+
+        <!-- =====================================================
+             DATA ANALYSIS BACKGROUND
+             ===================================================== -->
+
+        <div class="auth-bg-grid" aria-hidden="true"></div>
+
+        <div class="auth-bg-layer" aria-hidden="true">
+
+            <!-- BAR CHART -->
+            <svg class="auth-bg-bar"
+                 viewBox="0 0 290 330"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <linearGradient id="bgBar1" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9"/>
+                        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.25"/>
+                    </linearGradient>
+
+                    <linearGradient id="bgBar2" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.9"/>
+                        <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.25"/>
+                    </linearGradient>
+
+                    <linearGradient id="bgBar3" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#6366f1" stop-opacity="0.95"/>
+                        <stop offset="100%" stop-color="#6366f1" stop-opacity="0.3"/>
+                    </linearGradient>
+
+                    <linearGradient id="bgBar4" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#a855f7" stop-opacity="0.95"/>
+                        <stop offset="100%" stop-color="#a855f7" stop-opacity="0.3"/>
+                    </linearGradient>
+                </defs>
+
+                <rect x="0" y="0" width="290" height="330"
+                      fill="#0f172a"
+                      fill-opacity="0.6"
+                      rx="14"/>
+
+                <text x="145" y="30"
+                      text-anchor="middle"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="15"
+                      font-weight="700">
+                    Monthly Revenue
+                </text>
+
+                <line x1="22" y1="285" x2="268" y2="285"
+                      stroke="#64748b"
+                      stroke-opacity="0.5"
+                      stroke-width="1.5"/>
+
+                <line x1="22" y1="225" x2="268" y2="225"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <line x1="22" y1="165" x2="268" y2="165"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <line x1="22" y1="105" x2="268" y2="105"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <rect x="42" y="175" width="36" height="110"
+                      fill="url(#bgBar1)" rx="4"/>
+
+                <rect x="88" y="135" width="36" height="150"
+                      fill="url(#bgBar2)" rx="4"/>
+
+                <rect x="134" y="95" width="36" height="190"
+                      fill="url(#bgBar3)" rx="4"/>
+
+                <rect x="180" y="55" width="36" height="230"
+                      fill="url(#bgBar4)" rx="4"/>
+
+                <rect x="226" y="115" width="36" height="170"
+                      fill="url(#bgBar2)" rx="4"/>
+
+                <text x="60" y="302" text-anchor="middle"
+                      fill="#64748b" font-size="10">Jan</text>
+
+                <text x="106" y="302" text-anchor="middle"
+                      fill="#64748b" font-size="10">Feb</text>
+
+                <text x="152" y="302" text-anchor="middle"
+                      fill="#64748b" font-size="10">Mar</text>
+
+                <text x="198" y="302" text-anchor="middle"
+                      fill="#64748b" font-size="10">Apr</text>
+
+                <text x="244" y="302" text-anchor="middle"
+                      fill="#64748b" font-size="10">May</text>
+            </svg>
+
+
+            <!-- LINE CHART -->
+            <svg class="auth-bg-line"
+                 viewBox="0 0 330 210"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <linearGradient id="bgLine"
+                                    x1="0"
+                                    y1="0"
+                                    x2="1"
+                                    y2="0">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#6366f1"/>
+                        <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+
+                    <linearGradient id="bgArea"
+                                    x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1">
+                        <stop offset="0%" stop-color="#6366f1" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+
+                <rect x="0" y="0" width="330" height="210"
+                      fill="#0f172a"
+                      fill-opacity="0.6"
+                      rx="14"/>
+
+                <text x="165" y="28"
+                      text-anchor="middle"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="14"
+                      font-weight="700">
+                    Growth Trend
+                </text>
+
+                <line x1="32" y1="170" x2="300" y2="170"
+                      stroke="#64748b"
+                      stroke-opacity="0.5"/>
+
+                <line x1="32" y1="120" x2="300" y2="120"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <line x1="32" y1="70" x2="300" y2="70"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <path d="M32 148 L74 118 L116 138 L158 88 L200 103 L242 58 L300 78 L300 170 L32 170 Z"
+                      fill="url(#bgArea)"/>
+
+                <polyline
+                    points="32,148 74,118 116,138 158,88 200,103 242,58 300,78"
+                    fill="none"
+                    stroke="url(#bgLine)"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+
+                <circle cx="32" cy="148" r="4.5" fill="#38bdf8"/>
+                <circle cx="74" cy="118" r="4.5" fill="#38bdf8"/>
+                <circle cx="116" cy="138" r="4.5" fill="#22d3ee"/>
+                <circle cx="158" cy="88" r="4.5" fill="#6366f1"/>
+                <circle cx="200" cy="103" r="4.5" fill="#6366f1"/>
+                <circle cx="242" cy="58" r="4.5" fill="#a855f7"/>
+                <circle cx="300" cy="78" r="4.5" fill="#a855f7"/>
+            </svg>
+
+
+            <!-- DONUT CHART -->
+            <svg class="auth-bg-donut"
+                 viewBox="0 0 250 250"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <rect x="0" y="0"
+                      width="250"
+                      height="250"
+                      fill="#0f172a"
+                      fill-opacity="0.6"
+                      rx="14"/>
+
+                <text x="125" y="35"
+                      text-anchor="middle"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="14"
+                      font-weight="700">
+                    Portfolio Split
+                </text>
+
+                <circle cx="125" cy="130"
+                        r="78"
+                        fill="none"
+                        stroke="#1e293b"
+                        stroke-width="22"/>
+
+                <circle cx="125" cy="130"
+                        r="78"
+                        fill="none"
+                        stroke="#6366f1"
+                        stroke-width="22"
+                        stroke-dasharray="196 490"
+                        transform="rotate(-90 125 130)"
+                        stroke-linecap="round"/>
+
+                <circle cx="125" cy="130"
+                        r="78"
+                        fill="none"
+                        stroke="#22d3ee"
+                        stroke-width="22"
+                        stroke-dasharray="123 490"
+                        stroke-dashoffset="-196"
+                        transform="rotate(-90 125 130)"
+                        stroke-linecap="round"/>
+
+                <circle cx="125" cy="130"
+                        r="78"
+                        fill="none"
+                        stroke="#a855f7"
+                        stroke-width="22"
+                        stroke-dasharray="98 490"
+                        stroke-dashoffset="-319"
+                        transform="rotate(-90 125 130)"
+                        stroke-linecap="round"/>
+
+                <circle cx="125" cy="130"
+                        r="78"
+                        fill="none"
+                        stroke="#38bdf8"
+                        stroke-width="22"
+                        stroke-dasharray="73 490"
+                        stroke-dashoffset="-417"
+                        transform="rotate(-90 125 130)"
+                        stroke-linecap="round"/>
+
+                <text x="125" y="128"
+                      text-anchor="middle"
+                      fill="#f8fafc"
+                      font-family="Inter, sans-serif"
+                      font-size="30"
+                      font-weight="800">
+                    72%
+                </text>
+
+                <text x="125" y="148"
+                      text-anchor="middle"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="11">
+                    Income Rate
+                </text>
+            </svg>
+
+
+            <!-- ACTIVITY COMPARISON -->
+            <svg class="auth-bg-stat"
+                 viewBox="0 0 270 135"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <rect x="0" y="0"
+                      width="270"
+                      height="135"
+                      fill="#0f172a"
+                      fill-opacity="0.6"
+                      rx="14"/>
+
+                <text x="20" y="16"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="12"
+                      font-weight="700">
+                    Activity Comparison
+                </text>
+
+                <line x1="20" y1="115" x2="250" y2="115"
+                      stroke="#64748b"
+                      stroke-opacity="0.5"/>
+
+                <line x1="20" y1="85" x2="250" y2="85"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <line x1="20" y1="55" x2="250" y2="55"
+                      stroke="#64748b"
+                      stroke-opacity="0.3"
+                      stroke-dasharray="3 3"/>
+
+                <polyline
+                    points="20,95 60,75 100,80 140,45 180,60 220,30 250,35"
+                    fill="none"
+                    stroke="#22d3ee"
+                    stroke-width="2.8"/>
+
+                <polyline
+                    points="20,105 60,90 100,100 140,80 180,85 220,65 250,60"
+                    fill="none"
+                    stroke="#a855f7"
+                    stroke-width="2.8"
+                    stroke-dasharray="5 4"/>
+
+                <circle cx="250" cy="35" r="4" fill="#22d3ee"/>
+                <circle cx="250" cy="60" r="4" fill="#a855f7"/>
+            </svg>
+
+
+            <!-- CANDLESTICK -->
+            <svg class="auth-bg-candle"
+                 viewBox="0 0 220 160"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <rect x="0" y="0"
+                      width="220"
+                      height="160"
+                      fill="#0f172a"
+                      fill-opacity="0.5"
+                      rx="10"/>
+
+                <text x="110" y="18"
+                      text-anchor="middle"
+                      fill="#94a3b8"
+                      font-family="Inter, sans-serif"
+                      font-size="11"
+                      font-weight="700">
+                    Market Price
+                </text>
+
+                <line x1="10" y1="80" x2="210" y2="80"
+                      stroke="#64748b"
+                      stroke-opacity="0.4"
+                      stroke-dasharray="2 3"/>
+
+                <line x1="25" y1="40" x2="25" y2="120" stroke="#22d3ee"/>
+                <rect x="20" y="55" width="10" height="45" fill="#22d3ee" fill-opacity="0.7"/>
+
+                <line x1="50" y1="35" x2="50" y2="110" stroke="#a855f7"/>
+                <rect x="45" y="48" width="10" height="50" fill="#a855f7" fill-opacity="0.7"/>
+
+                <line x1="75" y1="45" x2="75" y2="125" stroke="#22d3ee"/>
+                <rect x="70" y="60" width="10" height="40" fill="#22d3ee" fill-opacity="0.7"/>
+
+                <line x1="100" y1="30" x2="100" y2="100" stroke="#6366f1"/>
+                <rect x="95" y="42" width="10" height="48" fill="#6366f1" fill-opacity="0.7"/>
+
+                <line x1="125" y1="50" x2="125" y2="115" stroke="#a855f7"/>
+                <rect x="120" y="62" width="10" height="38" fill="#a855f7" fill-opacity="0.7"/>
+
+                <line x1="150" y1="38" x2="150" y2="108" stroke="#22d3ee"/>
+                <rect x="145" y="50" width="10" height="42" fill="#22d3ee" fill-opacity="0.7"/>
+
+                <line x1="175" y1="42" x2="175" y2="120" stroke="#6366f1"/>
+                <rect x="170" y="58" width="10" height="46" fill="#6366f1" fill-opacity="0.7"/>
+
+                <line x1="200" y1="48" x2="200" y2="112" stroke="#a855f7"/>
+                <rect x="195" y="60" width="10" height="40" fill="#a855f7" fill-opacity="0.7"/>
+            </svg>
+
+        </div>
+
+
+        <!-- =====================================================
+             LOGIN CARD
+             ===================================================== -->
+
+        <div class="auth-card">
+
+            <div class="auth-header">
+
+                <a href="index.html" class="auth-logo">
+                    <span class="logo-icon">&#x1F4B0;</span>
+                    <span>FinancePro</span>
+                </a>
+
+                <h1>Welcome Back</h1>
+                <p>Login to access your dashboard</p>
+
+            </div>
+
+
+            <!-- =================================================
+                 QUICK LOGIN
+                 ================================================= -->
+
+            <div class="quick-login">
+
+                <!-- GOOGLE -->
+                <a href="/api/auth/google"
+                   class="quick-login-btn google"
+                   id="btnGoogleLogin"
+                   aria-label="Continue with Google">
+
+                    <svg viewBox="0 0 48 48"
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true">
+
+                        <path fill="#FFC107"
+                              d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+
+                        <path fill="#FF3D00"
+                              d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+
+                        <path fill="#4CAF50"
+                              d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+
+                        <path fill="#1976D2"
+                              d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+                    </svg>
+
+                    <span>Continue with Google</span>
+
+                </a>
+
+
+                <div class="quick-login-row">
+
+                    <!-- ADMIN -->
+                    <button type="button"
+                            class="quick-login-btn demo"
+                            id="btnDemoAdmin"
+                            title="Fill admin email — you enter the password">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+
+                            <path d="M12 2l2.09 6.26H22l-5.17 4.18L18.91 22 12 17.27 5.09 22l2.08-7.56L2 8.26h7.91z"
+                                  fill="currentColor"/>
+                        </svg>
+
+                        <span>Login as Admin</span>
+
+                    </button>
+
+
+                    <!-- USER -->
+                    <button type="button"
+                            class="quick-login-btn demo"
+                            id="btnDemoUser"
+                            title="Fill demo user email — you enter the password">
+
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             aria-hidden="true">
+
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+                                  fill="currentColor"/>
+                        </svg>
+
+                        <span>Login as User</span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="quick-login-divider">
+                    <span>or sign in with email</span>
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 NORMAL LOGIN
+                 ================================================= -->
+
+            <form id="loginForm" class="auth-form">
+
+                <div class="form-group">
+
+                    <label for="loginIdentifier">
+                        Email or Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="loginIdentifier"
+                        placeholder="you@example.com or 08123456789"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle">
+                            &#x1F441;
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="auth-error"
+                    id="loginError"
+                    style="display:none;">
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block btn-lg">
+                    Login
+                </button>
+
+            </form>
+
+
+            <div class="auth-footer">
+
+                <p>
+                    Don't have an account?
+                    <a href="register.html" class="auth-link">
+                        Register here
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="toast-container"
+        id="toastContainer">
+    </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+
+    <script>
+
+        /* =====================================================
+           REDIRECT IF ALREADY LOGGED IN
+           ===================================================== */
+
+        if (typeof redirectIfLoggedIn === 'function') {
+
+            redirectIfLoggedIn();
+
+        } else if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+
+            window.location.replace(
+                isAdmin()
+                    ? 'admin.html'
+                    : 'dashboard.html'
+            );
+
+        }
+
+
+        /* =====================================================
+           LOGIN ERROR
+           ===================================================== */
+
+        function showLoginError(msg) {
+
+            var el = document.getElementById('loginError');
+
+            if (!el) return;
+
+            el.textContent = msg;
+            el.style.display = 'block';
+
+        }
+
+
+        function clearLoginError() {
+
+            var el = document.getElementById('loginError');
+
+            if (!el) return;
+
+            el.textContent = '';
+            el.style.display = 'none';
+
+        }
+
+
+        /* =====================================================
+           PASSWORD TOGGLE
+           ===================================================== */
+
+        var passwordToggle =
+            document.getElementById('passwordToggle');
+
+        if (passwordToggle) {
+
+            passwordToggle.addEventListener(
+                'click',
+                function () {
+
+                    var input =
+                        document.getElementById('loginPassword');
+
+                    if (!input) return;
+
+                    input.type =
+                        input.type === 'password'
+                            ? 'text'
+                            : 'password';
+
+                    this.textContent =
+                        input.type === 'password'
+                            ? '\uD83D\uDC41'
+                            : '\uD83D\uDE48';
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           GOOGLE CALLBACK
+           ===================================================== */
+
+        (function handleGoogleCallback() {
+
+            var params =
+                new URLSearchParams(window.location.search);
+
+            var gToken =
+                params.get('google_token');
+
+            var gRole =
+                params.get('google_role');
+
+            var gErr =
+                params.get('error');
+
+
+            if (gErr) {
+
+                var messages = {
+
+                    google_not_configured:
+                        'Google Login belum dikonfigurasi oleh administrator.',
+
+                    google_denied:
+                        'Google sign-in was cancelled.',
+
+                    google_token_failed:
+                        'Google authentication failed. Please try again.',
+
+                    account_inactive:
+                        'Your account is deactivated. Contact administrator.'
+
+                };
+
+                var msg =
+                    messages[gErr] ||
+                    ('Google login error: ' + gErr);
+
+                if (typeof showToast === 'function') {
+                    showToast(msg, 'error');
+                }
+
+                window.history.replaceState(
+                    {},
+                    '',
+                    window.location.pathname
+                );
+
+                return;
+            }
+
+
+            if (gToken && gRole) {
+
+                if (typeof setToken === 'function') {
+                    setToken(gToken);
+                }
+
+
+                if (
+                    typeof AuthAPI !== 'undefined' &&
+                    AuthAPI.getMe
+                ) {
+
+                    AuthAPI.getMe().then(function (res) {
+
+                        if (
+                            res.ok &&
+                            res.data &&
+                            res.data.data
+                        ) {
+
+                            if (
+                                typeof setSession === 'function'
+                            ) {
+                                setSession(res.data.data);
+                            }
+
+                            if (typeof showToast === 'function') {
+                                showToast(
+                                    'Google login successful!',
+                                    'success'
+                                );
+                            }
+
+                            window.history.replaceState(
+                                {},
+                                '',
+                                window.location.pathname
+                            );
+
+
+                            setTimeout(function () {
+
+                                window.location.replace(
+                                    gRole === 'ADMIN'
+                                        ? 'admin.html'
+                                        : 'dashboard.html'
+                                );
+
+                            }, 400);
+
+                        } else {
+
+                            if (typeof showToast === 'function') {
+                                showToast(
+                                    'Google login failed to load profile.',
+                                    'error'
+                                );
+                            }
+
+                        }
+
+                    });
+
+                }
+
+            }
+
+        })();
+
+
+        /* =====================================================
+           QUICK LOGIN INFO
+           ===================================================== */
+
+        var QUICK_LOGIN_INFO = {
+            adminEmail: null,
+            demoUserEmail: null
+        };
+
+
+        (async function loadQuickLoginInfo() {
+
+            try {
+
+                var res =
+                    await fetch('/api/auth/quick-login-info');
+
+                var json =
+                    await res.json();
+
+
+                if (
+                    json &&
+                    json.success &&
+                    json.data
+                ) {
+
+                    QUICK_LOGIN_INFO.adminEmail =
+                        json.data.adminEmail;
+
+                    QUICK_LOGIN_INFO.demoUserEmail =
+                        json.data.demoUserEmail;
+
+                }
+
+            } catch (e) {
+
+                console.warn(
+                    'Quick login info unavailable:',
+                    e
+                );
+
+            }
+
+        })();
+
+
+        /* =====================================================
+           ADMIN / USER QUICK LOGIN
+           ===================================================== */
+
+        async function performQuickLogin(kind) {
+
+            var email =
+                kind === 'admin'
+                    ? QUICK_LOGIN_INFO.adminEmail
+                    : QUICK_LOGIN_INFO.demoUserEmail;
+
+
+            if (!email) {
+
+                var msg =
+                    kind === 'admin'
+
+                        ? 'Admin account is not configured. Set ADMIN_EMAIL in backend/.env and run npm run seed.'
+
+                        : 'Demo user is not configured. Set DEMO_USER_EMAIL and DEMO_USER_PASSWORD in backend/.env and run npm run seed.';
+
+
+                if (typeof showToast === 'function') {
+                    showToast(msg, 'error');
+                }
+
+                return;
+            }
+
+
+            var identifier =
+                document.getElementById('loginIdentifier');
+
+            var password =
+                document.getElementById('loginPassword');
+
+
+            if (identifier) {
+                identifier.value = email;
+            }
+
+            if (password) {
+                password.value = '';
+                password.focus();
+            }
+
+
+            clearLoginError();
+
+
+            if (typeof showToast === 'function') {
+
+                showToast(
+                    'Email filled — enter your ' +
+                    (kind === 'admin'
+                        ? 'admin'
+                        : 'user') +
+                    ' password to sign in.',
+                    'info'
+                );
+
+            }
+
+        }
+
+
+        var adminButton =
+            document.getElementById('btnDemoAdmin');
+
+        if (adminButton) {
+
+            adminButton.addEventListener(
+                'click',
+                function () {
+                    performQuickLogin('admin');
+                }
+            );
+
+        }
+
+
+        var userButton =
+            document.getElementById('btnDemoUser');
+
+        if (userButton) {
+
+            userButton.addEventListener(
+                'click',
+                function () {
+                    performQuickLogin('user');
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           NORMAL LOGIN
+           ===================================================== */
+
+        var loginForm =
+            document.getElementById('loginForm');
+
+
+        if (loginForm) {
+
+            loginForm.addEventListener(
+                'submit',
+                async function (e) {
+
+                    e.preventDefault();
+
+                    clearLoginError();
+
+
+                    var identifier =
+                        document
+                            .getElementById('loginIdentifier')
+                            .value
+                            .trim();
+
+
+                    var password =
+                        document
+                            .getElementById('loginPassword')
+                            .value;
+
+
+                    if (!identifier || !password) {
+
+                        showLoginError(
+                            'Please fill in all fields.'
+                        );
+
+                        return;
+
+                    }
+
+
+                    var btn =
+                        this.querySelector(
+                            'button[type="submit"]'
+                        );
+
+
+                    if (btn) {
+
+                        btn.disabled = true;
+                        btn.textContent = 'Loading...';
+
+                    }
+
+
+                    var result =
+                        await AuthAPI.login(
+                            identifier,
+                            password
+                        );
+
+
+                    if (btn) {
+
+                        btn.disabled = false;
+                        btn.textContent = 'Login';
+
+                    }
+
+
+                    if (!result.ok) {
+
+                        showLoginError(
+                            result.data.message ||
+                            'Login failed.'
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (typeof showToast === 'function') {
+
+                        showToast(
+                            'Login successful!',
+                            'success'
+                        );
+
+                    }
+
+
+                    var session =
+                        typeof getSession === 'function'
+                            ? getSession()
+                            : null;
+
+
+                    setTimeout(function () {
+
+                        window.location.replace(
+
+                            session &&
+                            session.role === 'ADMIN'
+
+                                ? 'admin.html'
+
+                                : 'dashboard.html'
+
+                        );
+
+                    }, 500);
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Import / Export — FinancePro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">&#9776;</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#127769;</button>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Import / Export Data</h1>
+            <p>Bulk manage transaction data via CSV</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Export Transactions</h3></div>
+            <p style="color:var(--text-light);margin-bottom:16px;font-size:14px;">
+                Download all transactions from the database as a CSV file.
+            </p>
+            <button class="btn btn-primary" id="btnExport">Download CSV Export</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>CSV Template</h3></div>
+            <p style="color:var(--text-light);margin-bottom:16px;font-size:14px;">
+                Download the CSV template to see the required format before importing.
+            </p>
+            <button class="btn btn-secondary" id="btnTemplate">Download Template</button>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Import Transactions from CSV</h3></div>
+            <p style="color:var(--text-light);margin-bottom:16px;font-size:14px;">
+                Upload a CSV file to bulk import transactions. Required columns:
+                <code>transaction_date, type, category, description, amount</code>
+            </p>
+            <form id="importForm">
+                <div class="form-group">
+                    <label for="csvFile">Select CSV File</label>
+                    <input type="file" id="csvFile" accept=".csv" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Import CSV</button>
+                </div>
+            </form>
+            <div id="importResult" style="margin-top:20px;"></div>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+        requireAdmin();
+        initProtectedPageGuard();
+        renderSidebar('import-export');
+        initSidebarMobile();
+        initThemeToggle();
+
+        // Export
+        document.getElementById('btnExport').addEventListener('click', async function() {
+            this.disabled = true;
+            this.textContent = 'Exporting...';
+            var result = await CSVAPI.export();
+            this.disabled = false;
+            this.textContent = 'Download CSV Export';
+
+            if (!result.ok) {
+                showToast(result.data.message || 'Export failed', 'error');
+                return;
+            }
+
+            var a = document.createElement('a');
+            a.href = result.url;
+            a.download = 'transactions_export.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(result.url);
+            showToast('Export downloaded!', 'success');
+        });
+
+        // Template
+        document.getElementById('btnTemplate').addEventListener('click', async function() {
+            var token = getToken();
+            var response = await fetch(API_BASE_URL + '/csv/template', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (!response.ok) {
+                showToast('Failed to download template', 'error');
+                return;
+            }
+            var blob = await response.blob();
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'csv_template.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Template downloaded!', 'success');
+        });
+
+        // Import
+        document.getElementById('importForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var fileInput = document.getElementById('csvFile');
+            var file = fileInput.files[0];
+            if (!file) {
+                showToast('Please select a CSV file', 'error');
+                return;
+            }
+
+            var btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Importing...';
+            document.getElementById('importResult').innerHTML = '';
+
+            var result = await CSVAPI.importFile(file);
+            btn.disabled = false;
+            btn.textContent = 'Import CSV';
+
+            if (!result.ok) {
+                showToast(result.data.message || 'Import failed', 'error');
+                return;
+            }
+
+            var data = result.data.data;
+            showToast(result.data.message, 'success');
+
+            var html = '<div class="card" style="background:var(--bg);margin-top:12px;">';
+            html += '<p style="font-weight:600;color:var(--income);">Imported: ' + data.imported + ' transactions</p>';
+            if (data.errors && data.errors.length > 0) {
+                html += '<p style="font-weight:600;color:var(--expense);margin-top:8px;">Errors: ' + data.errors.length + '</p>';
+                html += '<ul style="margin-top:8px;font-size:13px;color:var(--text-light);max-height:200px;overflow-y:auto;">';
+                data.errors.forEach(function(err) {
+                    html += '<li>' + escapeHtml(err) + '</li>';
+                });
+                html += '</ul>';
+            }
+            html += '</div>';
+            document.getElementById('importResult').innerHTML = html;
+        });
+    </script>
+</body>
+</html>

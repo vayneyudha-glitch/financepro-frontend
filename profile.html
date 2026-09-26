@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Profile — FinancePro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">&#9776;</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#127769;</button>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>My Profile</h1>
+            <p>Manage your account information</p>
+        </div>
+
+        <!-- Profile Photo Card -->
+        <div class="card">
+            <div class="card-header"><h3>Profile Photo</h3></div>
+            <div class="profile-photo-section">
+                <div class="profile-photo-frame">
+                    <img id="profilePhotoPreview" class="profile-photo-img" alt="Profile photo preview" src="">
+                    <div class="profile-photo-placeholder" id="profilePhotoPlaceholder">&#x1F464;</div>
+                </div>
+                <div class="profile-photo-actions">
+                    <p class="profile-photo-help">Upload a photo for your account (JPG, PNG, WEBP, or GIF; max 12 MB).</p>
+                    <div class="profile-photo-buttons">
+                        <label for="profilePhotoInput" class="btn btn-primary" style="cursor:pointer; display:inline-block;">
+                            Choose Photo
+                        </label>
+                        <input type="file" id="profilePhotoInput" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" style="display:none;">
+                        <button type="button" class="btn btn-secondary" id="btnUploadPhoto" disabled>Upload</button>
+                        <button type="button" class="btn btn-danger" id="btnRemovePhoto">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Account Information</h3></div>
+            <div class="profile-info" id="profileInfo">
+                <div class="loading-state"><div class="spinner"></div><p>Loading profile...</p></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Edit Profile</h3></div>
+            <form id="profileForm" class="auth-form" style="max-width:none;">
+                <div class="form-group">
+                    <label for="profileName">Full Name</label>
+                    <input type="text" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileEmail">Email (read-only)</label>
+                    <input type="email" id="profileEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="profilePhone">Phone Number</label>
+                    <input type="text" id="profilePhone">
+                </div>
+                <div class="form-group">
+                    <label for="profileRole">Role</label>
+                    <input type="text" id="profileRole" readonly>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Change Password</h3></div>
+            <form id="changePasswordForm" class="auth-form" style="max-width:none;">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" placeholder="Enter current password" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Min. 8 characters" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" placeholder="Repeat new password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

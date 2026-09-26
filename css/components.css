@@ -1,0 +1,126 @@
+/* ============================================================
+   COMPONENTS.CSS — UI Component Styles
+   ============================================================ */
+
+/* === TOAST === */
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+    padding: 12px 20px; border-radius: var(--radius-sm); color: #fff; font-size: 14px; font-weight: 500;
+    opacity: 0; transform: translateX(100px); transition: all 0.3s; max-width: 400px;
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.success { background: var(--income); }
+.toast.error { background: var(--expense); }
+.toast.info { background: var(--balance); }
+
+/* === CONFIRM DIALOG === */
+.confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 250; justify-content: center; align-items: center; }
+.confirm-overlay.active { display: flex; }
+.confirm-dialog { background: var(--card-bg); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 400px; box-shadow: var(--shadow-lg); }
+.confirm-message { font-size: 16px; margin-bottom: 24px; line-height: 1.5; }
+.confirm-actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+/* === LOADING STATE === */
+.loading-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; gap: 12px; color: var(--text-light); }
+.spinner {
+    width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* === EMPTY STATE === */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); font-size: 14px; }
+
+/* === ERROR STATE === */
+.error-state { text-align: center; padding: 40px 20px; color: var(--expense); font-size: 14px; }
+
+/* === ADMIN KPI CARDS WITH COMPARISON === */
+.kpi-card {
+    background: var(--card-bg); border-radius: var(--radius); padding: 20px;
+    box-shadow: var(--shadow); border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.kpi-card.income { border-left-color: var(--income); }
+.kpi-card.expense { border-left-color: var(--expense); }
+.kpi-card.balance { border-left-color: var(--balance); }
+.kpi-card.count { border-left-color: var(--count); }
+.kpi-card.users { border-left-color: var(--count); }
+.kpi-card.warning { border-left-color: #f59e0b; }
+
+.kpi-label { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+.kpi-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.kpi-comparison {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600;
+    padding: 2px 8px; border-radius: 10px;
+}
+.kpi-comparison.up { background: var(--income-light); color: var(--income); }
+.kpi-comparison.down { background: var(--expense-light); color: var(--expense); }
+.kpi-comparison.neutral { background: var(--bg); color: var(--text-light); }
+.kpi-comparison i { font-style: normal; }
+
+/* === DATE RANGE FILTER === */
+.range-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.range-btn {
+    padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--card-bg); color: var(--text); font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: var(--transition);
+}
+.range-btn:hover { border-color: var(--primary); }
+.range-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* === BUDGET PROGRESS === */
+.budget-progress { margin: 8px 0; }
+.budget-progress-bar {
+    height: 24px; background: var(--bg); border-radius: 12px; overflow: hidden; position: relative;
+}
+.budget-progress-fill {
+    height: 100%; border-radius: 12px; transition: width 0.5s ease; display: flex;
+    align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 600; color: #fff;
+}
+.budget-progress-fill.under { background: var(--income); }
+.budget-progress-fill.warning { background: #f59e0b; }
+.budget-progress-fill.critical { background: #ef4444; }
+.budget-progress-fill.over { background: #dc2626; }
+.budget-status-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.budget-status-badge.UNDER_BUDGET { background: var(--income-light); color: var(--income); }
+.budget-status-badge.WARNING { background: #fef3c7; color: #92400e; }
+.budget-status-badge.CRITICAL { background: #fee2e2; color: #991b1b; }
+.budget-status-badge.OVER_BUDGET { background: var(--expense-light); color: var(--expense); }
+
+/* === SEVERITY BADGES === */
+.severity-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.severity-INFO { background: var(--primary-light); color: var(--primary); }
+.severity-WARNING { background: #fef3c7; color: #92400e; }
+.severity-CRITICAL { background: var(--expense-light); color: var(--expense); }
+
+/* === INSIGHT CARDS === */
+.insight-card {
+    background: var(--card-bg); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px;
+    border-left: 4px solid var(--primary); box-shadow: var(--shadow);
+}
+.insight-card .insight-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.insight-card .insight-message { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+.insight-card.positive { border-left-color: var(--income); }
+.insight-card.negative { border-left-color: var(--expense); }
+.insight-card.warning { border-left-color: #f59e0b; }
+
+/* === HEALTH STATUS === */
+.health-status { display: flex; align-items: center; gap: 8px; }
+.health-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.health-dot.healthy { background: var(--income); }
+.health-dot.warning { background: #f59e0b; }
+.health-dot.critical { background: var(--expense); }
+
+/* === ADMIN TABLE ENHANCEMENTS === */
+.checkbox-cell { width: 40px; text-align: center; }
+.data-table th.sortable { cursor: pointer; }
+.data-table th.sortable:hover { color: var(--primary); }
+
+/* === ADMIN CARD WITH HEADER ACTION === */
+.card-header-actions { display: flex; gap: 8px; align-items: center; }
+
+/* === RESPONSIVE ADMIN GRID === */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.chart-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }

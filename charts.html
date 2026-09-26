@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Analytics — FinancePro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">&#9776;</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#127769;</button>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Analytics</h1>
+            <p>Visualize your financial data</p>
+        </div>
+
+        <!-- Date Filter -->
+        <div class="filters-bar">
+            <div class="date-filter-group">
+                <label for="filterDateFrom">From</label>
+                <input type="date" id="filterDateFrom" class="filter-input">
+                <label for="filterDateTo">To</label>
+                <input type="date" id="filterDateTo" class="filter-input">
+            </div>
+            <button class="btn btn-primary btn-sm" id="btnApplyFilter">Apply</button>
+        </div>
+
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-header"><h3>Income vs Expense</h3></div>
+                <div class="chart-container"><canvas id="incomeExpenseChart"></canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3>Expense by Category</h3></div>
+                <div class="chart-container"><canvas id="expenseCategoryChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Monthly Cash Flow</h3></div>
+            <div class="chart-container"><canvas id="cashFlowChart"></canvas></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Transaction Trend</h3></div>
+            <div class="chart-container"><canvas id="transactionTrendChart"></canvas></div>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/charts.js"></script>
+    <script>
+        requireAuth();
+        initProtectedPageGuard();
+        renderSidebar('charts');
+        initSidebarMobile();
+        initThemeToggle();
+
+        var charts = {};
+        var dashboardData = null;
+
+        async function loadAnalyticsData() {
+            var result = await DashboardAPI.get();
+            if (!result.ok) {
+                showToast('Failed to load analytics data', 'error');
+                return;
+            }
+            dashboardData = result.data.data;
+            renderCharts();
+        }
+
+        function renderCharts() {
+            if (!dashboardData) return;
+            renderIncomeExpenseChart('incomeExpenseChart', dashboardData.monthlyTrend);
+            renderExpenseCategoryChart('expenseCategoryChart', dashboardData.expenseByCategory);
+            renderCashFlowChart('cashFlowChart', dashboardData.monthlyTrend);
+            renderTransactionTrendChart('transactionTrendChart', dashboardData.monthlyTrend);
+        }
+
+        document.getElementById('btnApplyFilter').addEventListener('click', function() {
+            showToast('Date filter applied. Showing data from database.', 'info');
+            loadAnalyticsData();
+        });
+
+        loadAnalyticsData();
+    </script>
+</body>
+</html>

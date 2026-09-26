@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="adminBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="adminSh" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#adminBg)"/>
+  <circle cx="64" cy="64" r="64" fill="url(#adminSh)"/>
+  <!-- Shield -->
+  <path d="M64 26 L88 36 V58 C88 74 78 86 64 92 C50 86 40 74 40 58 V36 Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+  <!-- Star inside shield -->
+  <path d="M64 44 L67.5 54.5 L78.5 54.5 L69.5 61 L72.8 71.5 L64 65.5 L55.2 71.5 L58.5 61 L49.5 54.5 L60.5 54.5 Z" fill="#fbbf24"/>
+  <!-- Head -->
+  <circle cx="64" cy="66" r="13" fill="#f1f5f9"/>
+  <path d="M48 94 C48 82 54 76 64 76 C74 76 80 82 80 94 Z" fill="#f1f5f9"/>
+  <!-- Crown -->
+  <path d="M52 40 L56 34 L60 40 L64 32 L68 40 L72 34 L76 40 L74 46 L54 46 Z" fill="#fbbf24" stroke="#f59e0b" stroke-width="1"/>
+</svg>

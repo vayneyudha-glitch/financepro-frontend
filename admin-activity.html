@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Activity Logs | FinancePro Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                <h1>Activity Logs</h1>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9790;</button>
+            </header>
+            <main class="page-content">
+                <div class="card">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <input type="text" class="form-input" id="searchInput" placeholder="Search description, user..." style="flex:1; min-width:200px;">
+                        <select class="form-input" id="actionFilter" style="max-width:180px;">
+                            <option value="">All Actions</option>
+                            <option value="LOGIN">Login</option>
+                            <option value="LOGOUT">Logout</option>
+                            <option value="REGISTER">Register</option>
+                            <option value="CREATE_TRANSACTION">Create Transaction</option>
+                            <option value="UPDATE_TRANSACTION">Update Transaction</option>
+                            <option value="DELETE_TRANSACTION">Delete Transaction</option>
+                            <option value="CREATE_CATEGORY">Create Category</option>
+                            <option value="UPDATE_CATEGORY">Update Category</option>
+                            <option value="DELETE_CATEGORY">Delete Category</option>
+                            <option value="ADMIN_UPDATE_USER">Admin Update User</option>
+                            <option value="ADMIN_DELETE_USER">Admin Delete User</option>
+                            <option value="ROLE_CHANGE">Role Change</option>
+                            <option value="PASSWORD_RESET">Password Reset</option>
+                            <option value="IMPORT_DATA">Import Data</option>
+                            <option value="EXPORT_DATA">Export Data</option>
+                        </select>
+                        <input type="date" class="form-input" id="dateFrom" style="max-width:150px;">
+                        <input type="date" class="form-input" id="dateTo" style="max-width:150px;">
+                        <select class="form-input" id="limitFilter" style="max-width:80px;">
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div id="logsTable"></div>
+                    <div id="logsPagination"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/admin-activity.js"></script>
+</body>
+</html>

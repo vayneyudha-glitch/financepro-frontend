@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Dashboard — FinancePro</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">&#9776;</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#127769;</button>
+
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Your financial overview at a glance</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="cards-grid" id="summaryCards">
+            <div class="card card-income">
+                <div class="card-icon-wrap"><span class="card-icon-emoji">&#x1F4C0;</span></div>
+                <p class="card-label">Total Income</p>
+                <h3 class="card-value" id="totalIncome">Rp 0</h3>
+            </div>
+            <div class="card card-expense">
+                <div class="card-icon-wrap"><span class="card-icon-emoji">&#x1F4C1;</span></div>
+                <p class="card-label">Total Expense</p>
+                <h3 class="card-value" id="totalExpense">Rp 0</h3>
+            </div>
+            <div class="card card-balance">
+                <div class="card-icon-wrap"><span class="card-icon-emoji">&#x1F4B0;</span></div>
+                <p class="card-label">Total Balance</p>
+                <h3 class="card-value" id="totalBalance">Rp 0</h3>
+            </div>
+            <div class="card card-count">
+                <div class="card-icon-wrap"><span class="card-icon-emoji">&#x1F4DD;</span></div>
+                <p class="card-label">Total Transactions</p>
+                <h3 class="card-value" id="totalTransactions">0</h3>
+            </div>
+        </div>
+
+        <!-- This Month Stats -->
+        <div class="card">
+            <div class="card-header">
+                <h3>This Month Summary</h3>
+                <span class="month-label" id="currentMonthLabel"></span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p class="stat-label">Income</p>
+                    <p class="stat-value" id="monthIncome">Rp 0</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Expense</p>
+                    <p class="stat-value" id="monthExpense">Rp 0</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Net Cash Flow</p>
+                    <p class="stat-value" id="netCashFlow">Rp 0</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Savings Rate</p>
+                    <p class="stat-value" id="savingsRate">0%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-header"><h3>Income vs Expense (Monthly)</h3></div>
+                <div class="chart-container"><canvas id="incomeExpenseChart"></canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-header"><h3>Expense by Category</h3></div>
+                <div class="chart-container"><canvas id="expenseCategoryChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h3>Monthly Cash Flow Trend</h3></div>
+            <div class="chart-container"><canvas id="cashFlowChart"></canvas></div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Transactions</h3>
+                <a href="transactions.html" class="btn btn-ghost btn-sm">View All</a>
+            </div>
+            <div class="table-wrapper" id="recentTransactions">
+                <div class="loading-state"><div class="spinner"></div><p>Loading transactions...</p></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transaction Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Transaction</h3>
+                <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+            </div>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label for="trxType">Type</label>
+                    <select id="trxType" required>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="trxCategory">Category</label>
+                    <select id="trxCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="trxAmount">Amount (Rp)</label>
+                    <input type="number" id="trxAmount" required min="1" step="1" placeholder="100000">
+                </div>
+                <div class="form-group">
+                    <label for="trxDescription">Description</label>
+                    <input type="text" id="trxDescription" required maxlength="200" placeholder="Monthly salary">
+                </div>
+                <div class="form-group">
+                    <label for="trxDate">Date</label>
+                    <input type="date" id="trxDate" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="modalCancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

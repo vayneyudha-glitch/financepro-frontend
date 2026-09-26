@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Data Center | FinancePro Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                <h1>Data Center</h1>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9790;</button>
+            </header>
+            <main class="page-content">
+                <!-- Import Section -->
+                <div class="card">
+                    <div class="card-header"><h3>Import Data (CSV)</h3></div>
+                    <div class="card-body">
+                        <p style="color:var(--text-light);margin-bottom:16px;">Upload a CSV file to import transactions. The file must have columns: <code>type,amount,category,description,date</code>.</p>
+                        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                            <input type="file" id="csvFile" accept=".csv" class="form-input" style="max-width:300px;">
+                            <button class="btn btn-primary" id="importBtn">Import</button>
+                        </div>
+                        <div id="importResult" style="margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- Export Section -->
+                <div class="card">
+                    <div class="card-header"><h3>Export Data</h3></div>
+                    <div class="card-body">
+                        <div class="chart-grid-3">
+                            <button class="btn btn-secondary" id="exportTransactions">Export Transactions</button>
+                            <button class="btn btn-secondary" id="exportUsers">Export Users</button>
+                            <button class="btn btn-secondary" id="exportCategories">Export Categories</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSV Template -->
+                <div class="card">
+                    <div class="card-header"><h3>CSV Template</h3></div>
+                    <div class="card-body">
+                        <p style="color:var(--text-light);margin-bottom:8px;">Use this format for importing transactions:</p>
+                        <pre style="background:var(--bg);padding:12px;border-radius:8px;overflow-x:auto;font-size:12px;">type,amount,category,description,date
+Income,5000000,Gaji,Monthly salary,2025-01-01
+Expense,50000,Makanan,Lunch,2025-01-02
+Expense,20000,Transport,Taxi,2025-01-03</pre>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/admin-import-export.js"></script>
+</body>
+</html>

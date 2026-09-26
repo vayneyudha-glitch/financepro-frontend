@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Prevent browser from caching authenticated page content -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Transaction Management | FinancePro Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <div class="app-layout">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle">&#9776;</button>
+                <h1>Transaction Management</h1>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">&#9790;</button>
+            </header>
+            <main class="page-content">
+                <div class="card">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <input type="text" class="form-input" id="searchInput" placeholder="Search description..." style="flex:1; min-width:200px;">
+                        <select class="form-input" id="typeFilter" style="max-width:120px;">
+                            <option value="">All Types</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                        <input type="date" class="form-input" id="dateFrom" style="max-width:150px;" title="From date">
+                        <input type="date" class="form-input" id="dateTo" style="max-width:150px;" title="To date">
+                        <input type="number" class="form-input" id="amountMin" placeholder="Min amount" style="max-width:120px;">
+                        <select class="form-input" id="limitFilter" style="max-width:80px;">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <button class="btn btn-primary" id="searchBtn">Search</button>
+                        <button class="btn btn-danger" id="bulkDeleteBtn" disabled>Bulk Delete</button>
+                        <button class="btn btn-secondary" id="exportBtn">Export</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div id="trxTable"></div>
+                    <div id="trxPagination"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/admin-transactions.js"></script>
+</body>
+</html>
